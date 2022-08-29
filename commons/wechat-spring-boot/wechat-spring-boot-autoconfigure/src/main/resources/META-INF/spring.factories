@@ -1,0 +1,6 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+icu.lowcoder.spring.commons.wechat.WeChatAutoConfiguration,\
+icu.lowcoder.spring.commons.wechat.cache.redis.RedisTokenCacheAutoConfiguration,\
+icu.lowcoder.spring.commons.wechat.cache.redis.RedisTicketCacheAutoConfiguration,\
+icu.lowcoder.spring.commons.wechat.cache.DefaultCacheAutoConfiguration

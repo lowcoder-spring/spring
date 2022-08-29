@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: boot-admin
+
+  cloud:
+    config:
+      discovery:
+        service-id: ${CONFIG_SERVICE_ID:config-server}
+        enabled: true
+    inetutils:
+      ignored-interfaces:
+        - ".*"
+  thymeleaf:
+    check-template-location: false
+
+eureka:
+  client:
+    service-url:
+      defaultZone:
+        ${EUREKA_SERVERS:http://local-server:8010/eureka}
+  instance:
+    prefer-ip-address: false
+
+---
+spring:
+  boot:
+    admin:
+      ui:
+        cache:
+          no-cache: true
+        extension-resource-locations: file:@project.basedir@/../boot-admin-ui-extensions/target/dist/
+        cache-templates: false
+  config:
+    activate:
+      on-profile: dev

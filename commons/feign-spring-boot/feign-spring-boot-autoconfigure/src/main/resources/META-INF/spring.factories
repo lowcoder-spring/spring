@@ -1,0 +1,4 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  icu.lowcoder.spring.commons.feign.FeignAutoConfiguration,\
+  icu.lowcoder.spring.commons.feign.FeignPageableEncoderAutoConfiguration

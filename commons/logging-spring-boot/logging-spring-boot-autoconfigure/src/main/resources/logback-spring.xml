@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <springProperty scope="context" name="rootLevel" source="icu.lowcoder.spring.commons.logging.root-level" defaultValue="INFO"/>
+    <springProperty scope="context" name="logstashEndpoint" source="icu.lowcoder.spring.commons.logging.logstash-endpoint"/>
+    <springProperty scope="context" name="service_name" source="spring.application.name"/>
+    <!-- http://logback.qos.ch/manual/configuration.html#conditional-->
+    <if condition='!isNull("logstashEndpoint")'>
+        <then>
+            <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+                <destination>${logstashEndpoint}</destination>
+                <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
+                    <includeMdcKeyName>traceId</includeMdcKeyName>
+                    <includeMdcKeyName>spanId</includeMdcKeyName>
+                </encoder>
+                <keepAliveDuration>5 minutes</keepAliveDuration>
+            </appender>
+            <root level="${rootLevel}">
+                <appender-ref ref="LOGSTASH"/>
+            </root>
+        </then>
+    </if>
+    <root level="${rootLevel}">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>

@@ -1,0 +1,14 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVERS}
+
+  environment: prod
+
+logging:
+  file:
+    name: /var/logs/lowcoder/cloud/${spring.application.name:spring}.log
+
+spring:
+  rabbitmq:
+    host: rabbitmq

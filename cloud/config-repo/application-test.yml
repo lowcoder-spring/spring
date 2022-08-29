@@ -1,0 +1,29 @@
+spring:
+  rabbitmq:
+    host: test-server
+  redis:
+    host: test-server
+  datasource:
+    hikari:
+      connection-timeout: 60000
+      max-lifetime: 600000
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 50
+
+logging:
+  file:
+    name: "/var/logs/lowcoder/cloud/${spring.application.name:spring}.log"
+  level:
+    org.springframework.cloud.commons.util.InetUtils: trace
+
+
+icu:
+  lowcoder:
+    spring:
+      commons:
+        exception:
+          print-stack-trace: true
+          show-detail: true

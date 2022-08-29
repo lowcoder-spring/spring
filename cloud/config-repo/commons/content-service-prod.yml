@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://prod-db:5434/content
+    hikari:
+      connection-test-query: "SELECT 1"
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+      database-platform:  icu.lowcoder.spring.cloud.content.helper.JsonbPostgresDialect
+
+icu:
+  lowcoder:
+    spring:
+      commons:
+        feign:
+          service-authenticate:
+            access-token-uri: http://gateway:8080/uac/oauth/token
+            grant-type: client_credentials
+            client-authentication-scheme: form
+
+security:
+  oauth2:
+    resource:
+      token-info-uri: http://gateway:8080/uac/oauth/check_token

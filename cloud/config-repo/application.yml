@@ -1,0 +1,33 @@
+spring:
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+    bus:
+      destination: "icu.lowcoder.spring.cloud.bus"
+  jpa:
+    open-in-view: true
+  jackson:
+    serialization:
+      write-dates-as-timestamps: true
+logging:
+  level:
+    com.netflix.eureka: OFF
+    com.netflix.discovery: OFF
+    org.springframework.cloud.config.client.ConfigServicePropertySourceLocator: WARN
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+    logfile:
+      external-file: ${logging.file.name}
+
+server:
+  tomcat:
+    remote-ip-header: x-forwarded-for
+  connection-timeout: 60000

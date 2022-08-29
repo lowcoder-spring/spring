@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: config-server
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+    bus:
+      destination: "icu.lowcoder.spring.cloud.bus"
+    inetutils:
+      ignored-interfaces:
+        - ".*"
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      connection-timeout: 60000
+      connection-test-query: "SELECT 1"
+      max-lifetime: 300000
+
+logging:
+  level:
+    com.netflix.eureka: OFF
+    com.netflix.discovery: OFF
+    org.springframework.cloud.config.server.environment.NativeEnvironmentRepository: WARN
+    org.springframework.cloud.config.server.environment.HttpClientConfigurableHttpConnectionFactory: ERROR
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always

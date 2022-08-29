@@ -1,0 +1,16 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+    hibernate:
+      ddl-auto: update
+
+icu:
+  lowcoder:
+    spring:
+      cloud:
+        content:
+          public-read-content-tags:
+            - 'some_app_banner'

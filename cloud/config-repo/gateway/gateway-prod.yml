@@ -1,0 +1,49 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        # messages service
+        - id: commons_message
+          uri: lb://message-service
+          predicates:
+            - Path=/messages/**
+        # auth service
+        - id: commons_auth
+          uri: lb://auth-service
+          predicates:
+            - Path=/uac/**
+          filters:
+            - StripPrefix=1
+        # file service
+        - id: commons_file
+          uri: lb://file-service
+          predicates:
+            - Path=/files/**
+        # org service
+        - id: commons_org
+          uri: lb://org-service
+          predicates:
+            - Path=/org/**
+          filters:
+            - StripPrefix=1
+        # bridge we chat
+        - id: we_chat_bridge_service
+          uri: lb://we-chat-bridge-service
+          predicates:
+            - Path=/bridge/we-chat/**
+          filters:
+            - StripPrefix=2
+        # db config service
+        - id: db_config_service
+          uri: lb://db-config-service
+          predicates:
+            - Path=/db-config/**
+          filters:
+            - StripPrefix=1
+        # content service
+        - id: content_service
+          uri: lb://content-service
+          predicates:
+            - Path=/content/**
+          filters:
+            - StripPrefix=1

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>icu.lowcoder.spring.commons</groupId>
+        <artifactId>commons-parent</artifactId>
+        <version>3.3.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>wechat-spring-boot</artifactId>
+    <packaging>pom</packaging>
+    <name>wechat-spring-boot</name>
+
+    <properties>
+        <bouncycastle.bcprov-jdk18on.version>1.71</bouncycastle.bcprov-jdk18on.version>
+        <commons.codec.version>1.15</commons.codec.version>
+    </properties>
+
+    <modules>
+        <module>wechat-spring-boot-starter</module>
+        <module>wechat-spring-boot-autoconfigure</module>
+    </modules>
+</project>

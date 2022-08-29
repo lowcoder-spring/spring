@@ -1,0 +1,48 @@
+spring:
+  cloud:
+    gateway:
+      default-filters:
+        - TokenRelay=
+      routes:
+        - id: test_resource_service
+          uri: lb://test-resource-service
+          predicates:
+            - Path=/test/**
+          filters:
+            - StripPrefix=1
+        - id: auth_service
+          uri: lb://auth-service
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=1
+        # commons org service
+        - id: org_service
+          uri: lb://org-service
+          predicates:
+            - Path=/org/**
+          filters:
+            - StripPrefix=1
+        # commons org service
+        - id: db_config_service
+          uri: lb://db-config-service
+          predicates:
+            - Path=/db-config/**
+          filters:
+            - StripPrefix=1
+        # bridge we chat
+        - id: we_chat_bridge_service
+          uri: lb://we-chat-bridge-service
+          predicates:
+            - Path=/bridge/we-chat/**
+          filters:
+            - StripPrefix=2
+        # content service
+        - id: content_service
+          uri: lb://content-service
+          predicates:
+            - Path=/content/**
+          filters:
+            - StripPrefix=1
+server:
+  port: 8080

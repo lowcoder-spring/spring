@@ -1,0 +1,4 @@
+# Jpa Ext Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+icu.lowcoder.spring.commons.logging.LoggingAutoConfiguration,\
+icu.lowcoder.spring.commons.logging.access.AccessLoggingAutoConfiguration

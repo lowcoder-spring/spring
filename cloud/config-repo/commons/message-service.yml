@@ -1,0 +1,41 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+    hibernate:
+      ddl-auto: update
+
+  cloud:
+    stream:
+      bindings:
+        input:
+          group: ${spring.application.name}
+          destination: "icu.lowcoder.spring.cloud.message"
+          consumer:
+            max-attempts: 1
+        output:
+          content-type: application/json
+          destination: "icu.lowcoder.spring.cloud.message"
+      rabbit:
+        bindings:
+          input:
+            consumer:
+              bindingRoutingKey: icu.lowcoder.spring.cloud.message.push
+              requeueRejected: true
+              auto-bind-dlq: true
+          output:
+            producer:
+              routingKeyExpression: '''icu.lowcoder.spring.cloud.message.push'''
+
+icu:
+  lowcoder:
+    spring:
+      cloud:
+        message:
+          push:
+            we-chat:
+              apps:
+                - name: "<some-wechat-web>"
+                  app-id: "<we-chat-app-id>"

@@ -1,0 +1,9 @@
+icu:
+  lowcoder:
+    spring:
+      commons:
+        wechat:
+          token-cache:
+            enabled: true
+          ticket-cache:
+            enabled: true

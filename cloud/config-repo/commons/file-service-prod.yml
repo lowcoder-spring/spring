@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://prod-db:5434/commons-file
+    hikari:
+      connection-test-query: "SELECT 1"
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+
+security:
+  oauth2:
+    resource:
+      token-info-uri: http://gateway:8080/uac/oauth/check_token
+
+icu:
+  lowcoder:
+    spring:
+      commons:
+        ali:
+          oss:
+            endpoint: "oss-cn-hangzhou-internal.aliyuncs.com"
+            extranet-endpoint: "oss-cn-hangzhou.aliyuncs.com"
+            default-bucket: "files"
+            callback-url: "https://<file-service-api-domain>/v3/files/ali-oss/callback"
+            callback-service-prefix: "/v3"
+            client:
+              support-cname: true
+              protocol: HTTPS
+              user-agent: "lowcoder-spring-cloud-files-v3 / ali-oss"
+            sts:
+              endpoint: "sts-vpc.cn-hangzhou.aliyuncs.com"
+              role-arn: "<ali-sts-role-arn>"
+              duration-seconds: 900

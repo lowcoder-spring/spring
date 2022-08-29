@@ -1,0 +1,9 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwt-set-uri: lb://auth-service/oauth2/jwks
+
+server:
+  port: 9085

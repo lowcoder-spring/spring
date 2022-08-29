@@ -1,0 +1,41 @@
+spring:
+  rabbitmq:
+    host: local-server
+  redis:
+    host: local-server
+  datasource:
+    hikari:
+      maximum-pool-size: 50
+      connection-timeout: 60000
+      max-lifetime: 300000
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 50
+
+logging:
+  file:
+    name: "D:/data/logs/${spring.application.name:spring}.log"
+
+icu:
+  lowcoder:
+    spring:
+      commons:
+        exception:
+          print-stack-trace: true
+          show-detail: true
+
+        resource:
+          server:
+            jwt:
+              public-key: |
+                -----BEGIN PUBLIC KEY-----
+                MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyimZy0d/l2kQ/VcV2328
+                bg9IFV0MvdDlZq0fV/pAK3HuNHTis/ezUN6/Y3uj+myGhRJslfVpyVF54WA7BxZ4
+                Eh4vtEFAFwQrpPBg8s5vWSPl7GM9QxYApYMvubREP5I1waXXDr7NMDgSaae4bTi8
+                F3yZXVi57sGHw3aMwvhzF2qFrYoQMBrHvaoi1a6A7pVIaSfZszlPMVuq6ZBjnCMC
+                2dBTpGCPU5+Ra6/rmlJHK+vu6/0XNZ6soDwLfMwxY+lEJGYb9+aWb9xFYQzyooHA
+                UCQ4RO2dgzv/LT3hBtwI5riJ63ejuQr5OaI8ehR0LZw6HsjVMnM2vyUCMZOoPHKj
+                7QIDAQAB
+                -----END PUBLIC KEY-----

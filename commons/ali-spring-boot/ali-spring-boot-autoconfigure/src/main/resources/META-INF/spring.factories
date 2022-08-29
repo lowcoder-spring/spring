@@ -1,0 +1,5 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  icu.lowcoder.spring.commons.ali.oss.AliOssAutoConfiguration,\
+  icu.lowcoder.spring.commons.ali.oss.sts.AliOssStsAutoConfiguration,\
+  icu.lowcoder.spring.commons.ali.vod.AliVodAutoConfiguration

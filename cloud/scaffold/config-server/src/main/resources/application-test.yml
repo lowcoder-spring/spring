@@ -1,0 +1,29 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVERS}
+
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          ignore-local-ssh-settings: true
+          clone-on-start: true
+          uri: ssh://git@github.com:locoder-spring/cloud-config-template.git
+          search-paths: /**
+          order: 1
+        jdbc:
+          order: 0
+          sql: "SELECT KEY, VALUE from PROPERTIES where APPLICATION=? and PROFILE=? and LABEL=? and DELETED=false"
+
+  rabbitmq:
+    host: 172.16.4.198
+    port: 15672
+
+logging:
+  file:
+    name: /var/logs/lowcoder/cloud/${spring.application.name:spring}.log
+  level:
+    org.springframework.cloud.config.server.environment.MultipleJGitEnvironmentRepository: ERROR
+    org.apache.http.client.protocol.ResponseProcessCookies: ERROR

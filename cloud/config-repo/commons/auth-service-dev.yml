@@ -1,0 +1,76 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://local-server/commons-auth
+    username: lowcoder
+    password: lowcoder
+    hikari:
+      connection-test-query: "SELECT 1"
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+server:
+  port: 8100
+
+icu:
+  lowcoder:
+    spring:
+      commons:
+        robot-verification:
+          default-tester: "USELESS"
+          tencent:
+            app-id: "wechat-app-id"
+            app-secret-key: "the-app-secret-key**"
+        sms:
+          lingkai:
+            url: "http://sms-gateway:8092/sms"
+      cloud:
+        auth:
+          jwt:
+            key-id: dev-key
+            expiry-seconds: 86400
+            issuer: http://local-server/auth
+            public-key: |
+              -----BEGIN PUBLIC KEY-----
+              MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyimZy0d/l2kQ/VcV2328
+              bg9IFV0MvdDlZq0fV/pAK3HuNHTis/ezUN6/Y3uj+myGhRJslfVpyVF54WA7BxZ4
+              Eh4vtEFAFwQrpPBg8s5vWSPl7GM9QxYApYMvubREP5I1waXXDr7NMDgSaae4bTi8
+              F3yZXVi57sGHw3aMwvhzF2qFrYoQMBrHvaoi1a6A7pVIaSfZszlPMVuq6ZBjnCMC
+              2dBTpGCPU5+Ra6/rmlJHK+vu6/0XNZ6soDwLfMwxY+lEJGYb9+aWb9xFYQzyooHA
+              UCQ4RO2dgzv/LT3hBtwI5riJ63ejuQr5OaI8ehR0LZw6HsjVMnM2vyUCMZOoPHKj
+              7QIDAQAB
+              -----END PUBLIC KEY-----
+            private-key: |
+              -----BEGIN PRIVATE KEY-----
+              MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDKKZnLR3+XaRD9
+              VxXbfbxuD0gVXQy90OVmrR9X+kArce40dOKz97NQ3r9je6P6bIaFEmyV9WnJUXnh
+              YDsHFngSHi+0QUAXBCuk8GDyzm9ZI+XsYz1DFgClgy+5tEQ/kjXBpdcOvs0wOBJp
+              p7htOLwXfJldWLnuwYfDdozC+HMXaoWtihAwGse9qiLVroDulUhpJ9mzOU8xW6rp
+              kGOcIwLZ0FOkYI9Tn5Frr+uaUkcr6+7r/Rc1nqygPAt8zDFj6UQkZhv35pZv3EVh
+              DPKigcBQJDhE7Z2DO/8tPeEG3AjmuInrd6O5Cvk5ojx6FHQtnDoeyNUycza/JQIx
+              k6g8cqPtAgMBAAECggEAUk/16qrF7KQ+4qfeomvjmPxn4Srt0SuI+/FpXazrC8Vr
+              s7gTxisIu9i2HI9vCLu/WddSlwxBclLWSUmhPxWK9fWMftxCeByemJ23G6Wp+KWB
+              LGqLuxDuWnW7rOUVFL03Xg1kLwDJEuUBujssAGylSPrWhwdlTS1HVfKjBY+bbOCc
+              7Sb+Mix/Fxv6R4FG3Y5ediESYqNf7fsMWyPmIJV7QTu9DHKS6r22VvL7YfcQ4ziI
+              GJ1ViILIn4UrJf0e0/cfgEAWj1i1BquBP8yKIvRw1nz1T4iYmCqRNT84hcf3fTJA
+              vKww/EMi04AXsjRbNJahEeYzant/oadPeOZQlk6ykQKBgQDurfwuWF6a7jDShIZO
+              MxOTfPXgk5BoocVYHsFXO1lIhEh/jC51w/HA50urHRj+n3qvU79+dJrQAnGB0yA7
+              JyVMU/NWs+m0oPr6eEw0IRYzOceImwK3mBinmnI0XE0kuW0zJuWimNAuShjfJFO9
+              hWOXjrXklbLpEMYRLrN7G2vvLwKBgQDY1ToxRJRKjg2oi9Y00N6mpHA2aVKvhJ8q
+              ZpIYuu9McLW0Atzf/G2Go4obEHvWNRZOW6vKDFefp5kVxzfK8JxU6wvSW12Bwubl
+              afHOqpJjf8LXryga6DrGq8YOA586FmfyvAD4Gnjkbgf4u16TMIMHQP1v7ycg2Rer
+              DS5yd333owKBgBuftV0jyydBRBNJVUX9sVlTkB2C1qbVekKdpKDU9Jto+/8PGV11
+              5Sf/XQmb34WwrYFXPwWCt1w1vC9bYRKXkECKQtKZFgZaz1Fn1OH/plMdb9OGpUTc
+              bJYRUQBwYllKwLG34cH0z7tbxg8lZC++HW2wDas8DC3fTB02+3zXCqHvAoGBAJlF
+              sIrfBUvmOjVoE5TmCF0XY9KyhKZZQwF/28nrafhIu8hxNZyHHQzNUXRsJH14rTna
+              hwadztqmaAoC9qdXicplE8gwmVp+YSTNzQXfgPcgeqRnxhuvCM0i4y9I1CcFa5kj
+              2DOI0uf192CVYfb9lcFs6TlUff40NwzMloaHfN2tAoGBAKral7omnIwfh/ZfGCly
+              g3/c+8348sgWsRCdLA8s0tLSDtlq/ptV5KDU4TuP48rG9bDVfr047C37PMNQ09EW
+              wLdqmo386lzeAdR4VjssEBir9y+Py3ubGhJlNb3FgSZGD+bM2PnbyEc9zDvJmfdP
+              t5/nWEfjDNHfPRiCeNINQaHn
+              -----END PRIVATE KEY-----
+
+

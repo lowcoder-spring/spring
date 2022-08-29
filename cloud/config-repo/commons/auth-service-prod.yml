@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://prod-db:5434/commons-auth
+    hikari:
+      connection-test-query: "SELECT 1"
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+
+icu:
+  lowcoder:
+    spring:
+      commons:
+        robot-verification:
+          default-tester: "USELESS"
+
+      cloud:
+        auth:
+          sms:
+            enabled: true

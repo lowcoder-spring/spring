@@ -1,0 +1,43 @@
+server:
+  port: 8020
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8010/eureka/
+
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          ignore-local-ssh-settings: false
+          uri: file:///D:/Workspaces/icu/lowcoder/spring27/cloud/config-repo
+          search-paths: /**
+          order: 1
+        jdbc:
+          order: 0
+          sql: "SELECT KEY, VALUE from PROPERTIES where APPLICATION=? and PROFILE=? and LABEL=? and DELETED=false"
+
+  datasource:
+    url: jdbc:postgresql://local-server/config-repo?stringtype=unspecified
+    username: lowcoder
+    password: lowcoder
+
+  rabbitmq:
+    host: local-server
+
+logging:
+  file:
+    name: "D:/data/logs/${spring.application.name:spring}.log"
+  level:
+    org.springframework.cloud.config.server.environment.MultipleJGitEnvironmentRepository: ERROR
+    org.apache.http.client.protocol.ResponseProcessCookies: ERROR
+
+icu:
+  lowcoder:
+    spring:
+      commons:
+        management:
+          security:
+            enabled: false
