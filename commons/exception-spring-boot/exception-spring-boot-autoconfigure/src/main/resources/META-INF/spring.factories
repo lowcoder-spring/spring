@@ -4,5 +4,4 @@ icu.lowcoder.spring.commons.exception.ExceptionHandlerAutoConfiguration,\
 icu.lowcoder.spring.commons.exception.feign.FeignExceptionHandlerAutoConfiguration,\
 icu.lowcoder.spring.commons.exception.web.WebExceptionHandlerAutoConfiguration,\
 icu.lowcoder.spring.commons.exception.orm.OrmExceptionHandlerAutoConfiguration,\
-icu.lowcoder.spring.commons.exception.security.SecurityExceptionHandlerAutoConfiguration,\
-icu.lowcoder.spring.commons.exception.oauth2.OAuth2ExceptionHandlerAutoConfiguration
+icu.lowcoder.spring.commons.exception.security.SecurityExceptionHandlerAutoConfiguration

@@ -4,12 +4,13 @@ import icu.lowcoder.spring.commons.exception.ExceptionConvertersConfigurerAdapte
 import icu.lowcoder.spring.commons.exception.converter.UnifiedExceptionConverter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-@ConditionalOnClass(ObjectOptimisticLockingFailureExceptionConverter.class)
+@ConditionalOnClass(ObjectOptimisticLockingFailureException.class)
 public class OrmExceptionHandlerAutoConfiguration {
 
     @Configuration

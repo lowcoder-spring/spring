@@ -26,7 +26,6 @@ import java.util.List;
 public class ServletWebActuatorSecurityConfiguration {
 
     @Slf4j
-    @Order(Ordered.HIGHEST_PRECEDENCE)
     @Configuration(proxyBeanMethods = false)
     static class ActuatorRequestSecurityConfiguration {
 
@@ -108,6 +107,7 @@ public class ServletWebActuatorSecurityConfiguration {
         */
 
         @Bean
+        @Order(Ordered.HIGHEST_PRECEDENCE)
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             if (actuatorSecurityProperties.getEnabled()) {
                 AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);

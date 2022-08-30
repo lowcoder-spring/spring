@@ -1,0 +1,23 @@
+package icu.lowcoder.spring.commons.exception.security;
+
+import icu.lowcoder.spring.commons.exception.UnifiedExceptionResponse;
+import icu.lowcoder.spring.commons.exception.converter.UnifiedExceptionConverter;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+public class UsernameNotFoundExceptionConverter implements UnifiedExceptionConverter<UsernameNotFoundException> {
+
+    @Override
+    public UnifiedExceptionResponse convert(UsernameNotFoundException e) {
+        return UnifiedExceptionResponse.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message(e.getMessage())
+                .exception(e.getClass().getName())
+                .build();
+    }
+
+    @Override
+    public boolean support(Class<?> clazz) {
+        return UsernameNotFoundException.class.isAssignableFrom(clazz);
+    }
+}

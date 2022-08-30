@@ -31,3 +31,13 @@ server:
   tomcat:
     remote-ip-header: x-forwarded-for
   connection-timeout: 60000
+
+feign:
+  autoconfiguration:
+    jackson:
+      enabled: true
+  client:
+    refresh-enabled: true
+  oauth2:
+    enabled: true
+    load-balanced: true

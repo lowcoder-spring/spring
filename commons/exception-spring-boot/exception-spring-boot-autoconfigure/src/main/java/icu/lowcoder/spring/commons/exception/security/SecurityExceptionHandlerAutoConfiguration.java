@@ -20,6 +20,10 @@ public class SecurityExceptionHandlerAutoConfiguration {
             List<UnifiedExceptionConverter<? extends Exception>> exceptionConverters = new ArrayList<>();
             exceptionConverters.add(new AccessDeniedExceptionConverter());
             exceptionConverters.add(new AuthenticationCredentialsNotFoundExceptionConverter());
+            exceptionConverters.add(new UsernameNotFoundExceptionConverter());
+            exceptionConverters.add(new BadCredentialsExceptionConverter());
+            exceptionConverters.add(new InsufficientAuthenticationExceptionConverter());
+            exceptionConverters.add(new AuthenticationExceptionConverter());
 
             converters.addAll(0, exceptionConverters);
         }

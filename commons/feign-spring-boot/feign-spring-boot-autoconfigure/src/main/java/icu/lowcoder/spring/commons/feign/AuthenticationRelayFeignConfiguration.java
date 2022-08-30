@@ -5,14 +5,15 @@ import feign.Logger;
 import feign.RequestInterceptor;
 import org.springframework.context.annotation.Bean;
 
+@Deprecated
 public class AuthenticationRelayFeignConfiguration {
-    @Bean
+    /*@Bean
     public RequestInterceptor authenticationRelayRequestInterceptor() {
         return new AuthenticationRelayRequestInterceptor();
-    }
+    }*/
 
-    @Bean
+    /*@Bean
     Logger.Level feignLoggerLevel() {
         return Logger.Level.FULL;
-    }
+    }*/
 }

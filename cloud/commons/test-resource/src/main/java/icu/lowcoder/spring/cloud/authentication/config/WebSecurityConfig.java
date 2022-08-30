@@ -1,13 +1,12 @@
 package icu.lowcoder.spring.cloud.authentication.config;
 
+import icu.lowcoder.spring.commons.exception.security.AccessDeniedExceptionHandler;
+import icu.lowcoder.spring.commons.exception.security.UnifiedExceptionAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
-import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
 
 @EnableWebSecurity
@@ -25,10 +24,9 @@ public class WebSecurityConfig {
                                 .antMatchers("/admin").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
-                .exceptionHandling((exceptions) -> exceptions
-                        .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
-                        .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
-                );
+                .exceptionHandling()
+                .accessDeniedHandler(new AccessDeniedExceptionHandler())
+                .authenticationEntryPoint(new UnifiedExceptionAuthenticationEntryPoint());
         return http.build();
     }
 }

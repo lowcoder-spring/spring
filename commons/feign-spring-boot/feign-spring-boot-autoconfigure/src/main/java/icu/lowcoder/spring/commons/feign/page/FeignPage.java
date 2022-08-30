@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+@Deprecated
 @Data
 public class FeignPage<T> implements Iterable<T>, Serializable {
     private List<T> content = new ArrayList<>();
