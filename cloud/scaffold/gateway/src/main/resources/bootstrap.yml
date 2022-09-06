@@ -17,5 +17,3 @@ eureka:
         ${EUREKA_SERVERS:http://local-server:8010/eureka}
   instance:
     prefer-ip-address: false
-
-debug: true
