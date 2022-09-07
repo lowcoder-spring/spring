@@ -16,22 +16,34 @@
 
 package icu.lowcoder.spring.cloud.authentication.web;
 
+import icu.lowcoder.spring.cloud.authentication.Constants;
+import icu.lowcoder.spring.cloud.authentication.config.AuthProperties;
 import icu.lowcoder.spring.cloud.authentication.dao.AccountRepository;
+import icu.lowcoder.spring.cloud.authentication.dict.SmsCodeCategory;
 import icu.lowcoder.spring.cloud.authentication.entity.Account;
 import icu.lowcoder.spring.cloud.authentication.security.self.AuthenticatedUser;
 import icu.lowcoder.spring.cloud.authentication.security.self.SelfGrantedToken;
 import icu.lowcoder.spring.cloud.authentication.security.self.SelfGrantedTokenManager;
+import icu.lowcoder.spring.cloud.authentication.service.SmsCodeManager;
 import icu.lowcoder.spring.cloud.authentication.web.model.PasswordLoginRequest;
+import icu.lowcoder.spring.cloud.authentication.web.model.SendSmsCodeRequest;
+import icu.lowcoder.spring.cloud.authentication.web.model.SmsLoginRequest;
+import icu.lowcoder.spring.cloud.authentication.web.model.SmsRegisterRequest;
+import icu.lowcoder.spring.commons.robot.RobotVerifier;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.Map;
 
 @RequestMapping("/login")
 @RestController
@@ -43,6 +55,12 @@ public class LoginController {
 	private AccountRepository accountRepository;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private RobotVerifier robotVerifier;
+	@Autowired
+	private AuthProperties authProperties;
+	@Autowired
+	private SmsCodeManager smsCodeManager;
 
 	@PostMapping("/password")
 	public SelfGrantedToken passwordLogin(@RequestBody PasswordLoginRequest request) {
@@ -62,6 +80,106 @@ public class LoginController {
 		if (!passwordEncoder.matches(request.getPassword(), account.getPassword())) {
 			throw new BadCredentialsException("用户名或密码错误");
 		}
+
+		return selfGrantedTokenManager.grant(AuthenticatedUser.create(account));
+	}
+
+	@PostMapping("/sms-code")
+	public void sendSmsCode(@RequestBody SendSmsCodeRequest request, @RequestParam Map<String, String> parameters, HttpServletRequest httpServletRequest) {
+		if (!StringUtils.hasText(request.getPhone())) {
+			throw new UsernameNotFoundException("手机号不能为空");
+		}
+
+		if (!robotVerifier.allow(httpServletRequest, parameters)) {
+			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "获取短信验证码失败，请重试。");
+		}
+
+		boolean existByPhone = accountRepository.existsByPhone(request.getPhone());
+		// 登陆时未开启自动注册判断手机号
+		if (request.getCategory().equals(SmsCodeCategory.LOGIN) && !authProperties.getSmsAutoRegister()) {
+			if (!existByPhone) {
+				throw new UsernameNotFoundException("手机号未注册");
+			}
+		}
+
+		// 注册时判断手机状态
+		if (request.getCategory().equals(SmsCodeCategory.REGISTER) && existByPhone) {
+			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "手机号已注册");
+		}
+
+		smsCodeManager.send(request.getCategory(), request.getPhone());
+	}
+
+	@PostMapping("/sms")
+	@Transactional
+	public SelfGrantedToken smsLogin(@RequestBody SmsLoginRequest request) {
+		if (!StringUtils.hasText(request.getPhone())) {
+			throw new UsernameNotFoundException("手机号不能为空");
+		}
+		if (!StringUtils.hasText(request.getSmsCode())) {
+			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "短信验证码不能为空");
+		}
+
+		try {
+			smsCodeManager.verify(SmsCodeCategory.LOGIN, request.getPhone(), request.getSmsCode());
+		} catch (Exception e) {
+			throw new BadCredentialsException(e.getMessage());
+		}
+
+		// 验证通过
+		Account account = accountRepository.findByPhone(request.getPhone())
+				.orElse(null);
+
+		if (account == null) {
+			if (!authProperties.getSmsAutoRegister()) {
+				throw new UsernameNotFoundException("手机号未注册");
+			}
+
+			account = new Account();
+			account.setPhone(request.getPhone());
+			account.setRegisterTime(new Date());
+			account.setPassword(Constants.EMPTY_ENCODED_PASSWORD);
+			account.setEnabled(true);
+			account.setName("手机用户" + request.getPhone().substring(request.getPhone().length() - 4));
+			accountRepository.save(account);
+		}
+
+		return selfGrantedTokenManager.grant(AuthenticatedUser.create(account));
+	}
+
+	@PostMapping("/register")
+	@Transactional
+	public SelfGrantedToken register(@RequestBody SmsRegisterRequest request) {
+		if (!StringUtils.hasText(request.getPhone())) {
+			throw new UsernameNotFoundException("手机号不能为空");
+		}
+		if (!StringUtils.hasText(request.getSmsCode())) {
+			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "短信验证码不能为空");
+		}
+
+		try {
+			smsCodeManager.verify(SmsCodeCategory.REGISTER, request.getPhone(), request.getSmsCode());
+		} catch (Exception e) {
+			throw new BadCredentialsException(e.getMessage());
+		}
+
+		// 注册时判断手机状态
+		if (accountRepository.existsByPhone(request.getPhone())) {
+			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "手机号已注册");
+		}
+
+		// 验证通过
+		Account account = new Account();
+		account.setPhone(request.getPhone());
+		account.setRegisterTime(new Date());
+		account.setName(request.getName());
+		account.setPassword(Constants.EMPTY_ENCODED_PASSWORD);
+		account.setEnabled(true);
+		if (!StringUtils.hasText(account.getName())) {
+			account.setName("手机用户" + request.getPhone().substring(request.getPhone().length() - 4));
+		}
+
+		accountRepository.save(account);
 
 		return selfGrantedTokenManager.grant(AuthenticatedUser.create(account));
 	}

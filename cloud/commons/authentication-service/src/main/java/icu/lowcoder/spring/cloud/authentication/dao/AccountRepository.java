@@ -4,8 +4,13 @@ import icu.lowcoder.spring.cloud.authentication.entity.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface AccountRepository extends JpaRepository<Account, UUID>, JpaSpecificationExecutor<Account> {
     Account findByPhoneOrEmail(String phone, String email);
+
+    boolean existsByPhone(String phone);
+
+    Optional<Account> findByPhone(String phone);
 }

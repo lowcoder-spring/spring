@@ -4,10 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "icu.lowcoder.spring.cloud.auth")
@@ -19,6 +15,9 @@ public class AuthProperties {
 
     private Integer minPasswordLength = 8;
 
-    private Set<String> autoRegisterClients = new HashSet<>();
-    private Set<String> allowReplacePhoneClients = new HashSet<>();
+    private Boolean smsAutoRegister = false;
+
+    private String loginSmsTemplate = "短信验证码：#code#，请在#effective#分钟内输入";
+
+    private String registerSmsTemplate = "短信验证码：#code#，请在#effective#分钟内输入";
 }

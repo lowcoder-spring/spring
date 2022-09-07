@@ -1,10 +1,10 @@
 package icu.lowcoder.spring.commons.robot.tencent;
 
-import icu.lowcoder.spring.commons.robot.RobotVerifier;
-import icu.lowcoder.spring.commons.robot.http.TextJackson2HttpMessageConverter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import icu.lowcoder.spring.commons.robot.RobotVerifier;
+import icu.lowcoder.spring.commons.robot.http.TextJackson2HttpMessageConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -13,10 +13,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 public class TencentCaptchaRobotVerifierService implements RobotVerifier {
@@ -93,6 +90,20 @@ public class TencentCaptchaRobotVerifierService implements RobotVerifier {
     }
 
     private String getUserIp(HttpServletRequest request) {
-        return request.getRemoteAddr();
+        String ip = request.getRemoteAddr();
+        Enumeration<String> forwardedForValues = request.getHeaders("X-Forwarded-For");
+        if (forwardedForValues != null && forwardedForValues.hasMoreElements()) {
+            ip = forwardedForValues.nextElement();
+            return ip;
+        }
+
+        // X-Real-IP
+        String realIp = request.getHeader("X-Real-IP");
+        if (StringUtils.hasText(realIp)) {
+            ip = realIp;
+            return ip;
+        }
+
+        return ip;
     }
 }
