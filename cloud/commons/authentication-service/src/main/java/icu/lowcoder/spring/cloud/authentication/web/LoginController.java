@@ -103,9 +103,9 @@ public class LoginController {
 		}
 
 		// 注册时判断手机状态
-		if (request.getCategory().equals(SmsCodeCategory.REGISTER) && existByPhone) {
+		/*if (request.getCategory().equals(SmsCodeCategory.REGISTER) && existByPhone) {
 			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "手机号已注册");
-		}
+		}*/
 
 		smsCodeManager.send(request.getCategory(), request.getPhone());
 	}
@@ -147,15 +147,19 @@ public class LoginController {
 		return selfGrantedTokenManager.grant(AuthenticatedUser.create(account));
 	}
 
-	@PostMapping("/register")
+	@PostMapping("/sms-register")
 	@Transactional
-	public SelfGrantedToken register(@RequestBody SmsRegisterRequest request) {
+	public SelfGrantedToken smsRegister(@RequestBody SmsRegisterRequest request) {
 		if (!StringUtils.hasText(request.getPhone())) {
 			throw new UsernameNotFoundException("手机号不能为空");
 		}
 		if (!StringUtils.hasText(request.getSmsCode())) {
 			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "短信验证码不能为空");
 		}
+		// 注册时判断手机状态
+		/*if (accountRepository.existsByPhone(request.getPhone())) {
+			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "手机号已注册");
+		}*/
 
 		try {
 			smsCodeManager.verify(SmsCodeCategory.REGISTER, request.getPhone(), request.getSmsCode());
@@ -163,23 +167,21 @@ public class LoginController {
 			throw new BadCredentialsException(e.getMessage());
 		}
 
-		// 注册时判断手机状态
-		if (accountRepository.existsByPhone(request.getPhone())) {
-			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "手机号已注册");
+		// 已注册用户直接返回
+		Account account = accountRepository.findByPhone(request.getPhone())
+				.orElse(null);
+		if (account == null) {
+			account = new Account();
+			account.setPhone(request.getPhone());
+			account.setRegisterTime(new Date());
+			account.setName(request.getName());
+			account.setPassword(Constants.EMPTY_ENCODED_PASSWORD);
+			account.setEnabled(true);
+			if (!StringUtils.hasText(account.getName())) {
+				account.setName("手机用户" + request.getPhone().substring(request.getPhone().length() - 4));
+			}
+			accountRepository.save(account);
 		}
-
-		// 验证通过
-		Account account = new Account();
-		account.setPhone(request.getPhone());
-		account.setRegisterTime(new Date());
-		account.setName(request.getName());
-		account.setPassword(Constants.EMPTY_ENCODED_PASSWORD);
-		account.setEnabled(true);
-		if (!StringUtils.hasText(account.getName())) {
-			account.setName("手机用户" + request.getPhone().substring(request.getPhone().length() - 4));
-		}
-
-		accountRepository.save(account);
 
 		return selfGrantedTokenManager.grant(AuthenticatedUser.create(account));
 	}

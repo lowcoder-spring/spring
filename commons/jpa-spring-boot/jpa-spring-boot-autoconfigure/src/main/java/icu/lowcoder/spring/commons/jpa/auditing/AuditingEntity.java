@@ -1,6 +1,5 @@
 package icu.lowcoder.spring.commons.jpa.auditing;
 
-import icu.lowcoder.spring.commons.jpa.CommonEntity;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
@@ -17,13 +16,13 @@ import java.util.Date;
 @Setter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class AuditingEntity extends CommonEntity {
+public class AuditingEntity {
     @CreatedDate
     private Date createdTime;
     @CreatedBy
     private String createdUser;
     @LastModifiedDate
-    private Date lastModifiedTime;
+    private Date modifiedTime;
     @LastModifiedBy
     private String modifiedUser;
 }

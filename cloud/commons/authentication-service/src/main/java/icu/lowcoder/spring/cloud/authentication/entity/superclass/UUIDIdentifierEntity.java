@@ -1,4 +1,4 @@
-package icu.lowcoder.spring.commons.jpa;
+package icu.lowcoder.spring.cloud.authentication.entity.superclass;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,13 +9,13 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.util.UUID;
 
-@Setter
-@Getter
+@Getter @Setter
 @MappedSuperclass
-@GenericGenerator(name = "idGenerator", strategy = "uuid2")
-public class CommonEntity {
+public class UUIDIdentifierEntity {
 
     @Id
-    @GeneratedValue(generator = "idGenerator")
+    @GeneratedValue(generator = "uuidIdGenerator")
+    @GenericGenerator(name = "uuidIdGenerator", strategy = "uuid2")
     private UUID id;
+
 }
