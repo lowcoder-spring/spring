@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -18,11 +18,11 @@ import java.util.Date;
 @EntityListeners(AuditingEntityListener.class)
 public class AuditingEntity {
     @CreatedDate
-    private Date createdTime;
+    private LocalDateTime createdTime;
     @CreatedBy
     private String createdUser;
     @LastModifiedDate
-    private Date modifiedTime;
+    private LocalDateTime modifiedTime;
     @LastModifiedBy
     private String modifiedUser;
 }
