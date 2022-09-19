@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.2</version>
+        <version>2.7.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -19,7 +19,7 @@
     <name>root-builder</name>
 
     <properties>
-        <spring-cloud.version>2021.0.3</spring-cloud.version>
+        <spring-cloud.version>2021.0.4</spring-cloud.version>
         <java.version>18</java.version>
         <logstash-logback-encoder.version>7.2</logstash-logback-encoder.version>
         <caffeine.version>3.1.1</caffeine.version>
