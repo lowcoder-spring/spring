@@ -31,7 +31,7 @@
 		</dependency>
 		<dependency>
 			<groupId>icu.lowcoder.spring.commons</groupId>
-			<artifactId>resource-server-spring-boot-starter</artifactId>
+			<artifactId>resource-server-spring-cloud-starter</artifactId>
 		</dependency>
 
 		<dependency>

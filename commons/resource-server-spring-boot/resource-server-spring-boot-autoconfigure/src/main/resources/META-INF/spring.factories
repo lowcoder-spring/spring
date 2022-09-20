@@ -1,3 +1,0 @@
-# Jpa Ext Auto Configure
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-icu.lowcoder.spring.commons.resource.server.ResourceServerAutoConfiguration

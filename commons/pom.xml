@@ -17,7 +17,7 @@
     <description>spring commons parent</description>
 
     <properties>
-        <spring-cloud.openfign.version>3.1.3</spring-cloud.openfign.version>
+        <spring-cloud.openfeign.version>3.1.3</spring-cloud.openfeign.version>
     </properties>
 
     <modules>
@@ -28,14 +28,13 @@
         <module>baidu-map-spring-boot</module>
         <module>cache-spring-boot</module>
         <module>exception-spring-boot</module>
-        <module>feign-spring-boot</module>
         <module>logging-spring-boot</module>
         <module>robot-verification-spring-boot</module>
         <module>security-spring-boot</module>
         <module>sms-spring-boot</module>
         <module>thread-spring-boot</module>
         <module>wechat-spring-boot</module>
-        <module>resource-server-spring-boot</module>
+        <module>resource-server-spring-cloud</module>
         <module>openfeign-spring-cloud</module>
     </modules>
 
@@ -108,16 +107,6 @@
             </dependency>
             <dependency>
                 <groupId>icu.lowcoder.spring.commons</groupId>
-                <artifactId>feign-spring-boot-starter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>icu.lowcoder.spring.commons</groupId>
-                <artifactId>feign-spring-boot-autoconfigure</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>icu.lowcoder.spring.commons</groupId>
                 <artifactId>logging-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -178,12 +167,12 @@
             </dependency>
             <dependency>
                 <groupId>icu.lowcoder.spring.commons</groupId>
-                <artifactId>resource-server-spring-boot-starter</artifactId>
+                <artifactId>resource-server-spring-cloud-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>icu.lowcoder.spring.commons</groupId>
-                <artifactId>resource-server-spring-boot-autoconfigure</artifactId>
+                <artifactId>resource-server-spring-cloud-autoconfigure</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -200,7 +189,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-openfeign-dependencies</artifactId>
-                <version>${spring-cloud.openfign.version}</version>
+                <version>${spring-cloud.openfeign.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
