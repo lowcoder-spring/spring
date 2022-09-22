@@ -19,7 +19,7 @@
         <module>eureka-server</module>
         <module>config-server</module>
         <module>boot-admin</module>
-        <module>boot-admin-ui-extensions</module>
+        <!--<module>boot-admin-ui-extensions</module>-->
         <module>gateway</module>
     </modules>
 

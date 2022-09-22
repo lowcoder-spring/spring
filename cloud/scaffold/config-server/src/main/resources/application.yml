@@ -5,8 +5,6 @@ spring:
     loadbalancer:
       ribbon:
         enabled: false
-    bus:
-      destination: "icu.lowcoder.spring.cloud.bus"
     inetutils:
       ignored-interfaces:
         - ".*"

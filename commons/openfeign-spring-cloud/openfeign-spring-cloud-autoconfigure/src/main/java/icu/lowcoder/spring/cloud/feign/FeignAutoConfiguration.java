@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class FeignAutoConfiguration {
 
     @Bean
-    @ConditionalOnProperty(prefix = "icu.lowcoder.spring.cloud.feign", name = "bearer-token-relay", value = "true")
+    @ConditionalOnProperty(prefix = "icu.lowcoder.spring.cloud.feign", name = "bearer-token-relay", havingValue = "true")
     public BearerTokenRequestInterceptor bearerTokenRequestInterceptor() {
         return new BearerTokenRequestInterceptor();
     }

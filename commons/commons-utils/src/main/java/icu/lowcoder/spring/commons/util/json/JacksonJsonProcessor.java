@@ -2,6 +2,8 @@ package icu.lowcoder.spring.commons.util.json;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.SneakyThrows;
 
 import java.util.List;
@@ -88,7 +90,7 @@ public class JacksonJsonProcessor implements JsonProcessor {
 
     private ObjectMapper buildObjectMapper(PropertyNamingStrategy propertyNamingStrategy) {
         ObjectMapper objectMapper = new ObjectMapper();
-
+        objectMapper.registerModule(new JavaTimeModule());
         objectMapper.setPropertyNamingStrategy(convertPropertyNamingStrategy(propertyNamingStrategy));
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return objectMapper;
@@ -99,17 +101,17 @@ public class JacksonJsonProcessor implements JsonProcessor {
 
         switch (propertyNamingStrategy) {
             case PASCAL_CASE:
-                jacksonPropertyNamingStrategy = com.fasterxml.jackson.databind.PropertyNamingStrategy.UPPER_CAMEL_CASE;
+                jacksonPropertyNamingStrategy = PropertyNamingStrategies.UPPER_CAMEL_CASE;
                 break;
             case KEBAB_CASE:
-                jacksonPropertyNamingStrategy = com.fasterxml.jackson.databind.PropertyNamingStrategy.KEBAB_CASE;
+                jacksonPropertyNamingStrategy = PropertyNamingStrategies.KEBAB_CASE;
                 break;
             case SNAKE_CASE:
-                jacksonPropertyNamingStrategy = com.fasterxml.jackson.databind.PropertyNamingStrategy.SNAKE_CASE;
+                jacksonPropertyNamingStrategy = PropertyNamingStrategies.SNAKE_CASE;
                 break;
             case CAMEL_CASE:
             default:
-                jacksonPropertyNamingStrategy = com.fasterxml.jackson.databind.PropertyNamingStrategy.LOWER_CAMEL_CASE;
+                jacksonPropertyNamingStrategy = PropertyNamingStrategies.LOWER_CAMEL_CASE;
         }
 
         return jacksonPropertyNamingStrategy;

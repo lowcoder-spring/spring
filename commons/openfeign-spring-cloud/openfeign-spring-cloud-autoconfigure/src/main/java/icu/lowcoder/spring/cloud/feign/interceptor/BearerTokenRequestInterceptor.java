@@ -23,10 +23,12 @@ public class BearerTokenRequestInterceptor implements RequestInterceptor {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (Objects.nonNull(requestAttributes)) {
             String authorizationHeader = requestAttributes.getRequest().getHeader(HttpHeaders.AUTHORIZATION);
-            Matcher matcher = BEARER_TOKEN_HEADER_PATTERN.matcher(authorizationHeader);
-            if (matcher.matches()) {
-                template.header(authorization);
-                template.header(authorization, authorizationHeader);
+            if (Objects.nonNull(authorizationHeader)) {
+                Matcher matcher = BEARER_TOKEN_HEADER_PATTERN.matcher(authorizationHeader);
+                if (matcher.matches()) {
+                    template.header(authorization);
+                    template.header(authorization, authorizationHeader);
+                }
             }
         }
     }

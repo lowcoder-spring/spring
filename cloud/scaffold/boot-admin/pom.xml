@@ -74,10 +74,10 @@
             <artifactId>spring-boot-admin-starter-server</artifactId>
         </dependency>
 
-        <dependency>
+        <!--<dependency>
             <groupId>icu.lowcoder.spring.cloud</groupId>
             <artifactId>boot-admin-ui-extensions</artifactId>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
     <dependencyManagement>

@@ -3,8 +3,6 @@ spring:
     loadbalancer:
       ribbon:
         enabled: false
-    bus:
-      destination: "icu.lowcoder.spring.cloud.bus"
   jpa:
     open-in-view: true
   jackson:
