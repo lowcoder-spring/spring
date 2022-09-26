@@ -20,10 +20,13 @@
 
     <properties>
         <spring-cloud.version>2021.0.4</spring-cloud.version>
-        <java.version>18</java.version>
         <logstash-logback-encoder.version>7.2</logstash-logback-encoder.version>
         <caffeine.version>3.1.1</caffeine.version>
         <jackson-datatype-jsr310.version>2.13.4</jackson-datatype-jsr310.version>
+
+        <java.version>18</java.version>
+        <maven.compiler.source>18</maven.compiler.source>
+        <maven.compiler.target>18</maven.compiler.target>
     </properties>
 
     <modules>
