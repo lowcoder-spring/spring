@@ -1,17 +1,36 @@
 package icu.lowcoder.spring.cloud.authentication.web;
 
-import org.springframework.security.core.Authentication;
+import icu.lowcoder.spring.cloud.authentication.dao.AccountRepository;
+import icu.lowcoder.spring.cloud.authentication.entity.Account;
+import icu.lowcoder.spring.cloud.authentication.util.AuthenticationUtils;
+import icu.lowcoder.spring.cloud.authentication.web.model.AccountProfile;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpServerErrorException;
+
+import java.util.UUID;
 
 @RequestMapping("/account")
 @RestController
 public class AccountController {
 
+    @Autowired
+    private AccountRepository accountRepository;
+
     @GetMapping("/profile")
-    public Object profile(Authentication authentication) {
-        // TODO profile
-        return authentication;
+    public AccountProfile profile() {
+        String userIdStr = AuthenticationUtils.currentUserId();
+        UUID userId = UUID.fromString(userIdStr);
+        Account account = accountRepository.findById(userId).orElseThrow(() -> new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "获取账户信息失败"));
+
+        AccountProfile accountProfile = new AccountProfile();
+        accountProfile.setUserId(account.getId());
+        accountProfile.setName(account.getName());
+        accountProfile.setEmail(account.getEmail());
+
+        return accountProfile;
     }
 }
