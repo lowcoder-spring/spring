@@ -4,6 +4,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -17,7 +18,7 @@ public class GrantedAuthoritiesExtractor implements Converter<Jwt, Collection<Gr
 
         Collection<String> authorities = Arrays.asList(scope.split(" "));
         return authorities.stream()
-                .map(Object::toString)
+                .filter(StringUtils::hasText)
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
