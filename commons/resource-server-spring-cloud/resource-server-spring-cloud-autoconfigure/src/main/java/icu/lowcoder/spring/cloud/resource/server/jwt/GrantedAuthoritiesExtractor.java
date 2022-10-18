@@ -8,6 +8,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 public class GrantedAuthoritiesExtractor implements Converter<Jwt, Collection<GrantedAuthority>> {
@@ -15,11 +16,14 @@ public class GrantedAuthoritiesExtractor implements Converter<Jwt, Collection<Gr
     @Override
     public Collection<GrantedAuthority> convert(Jwt jwt) {
         String scope = (String) jwt.getClaims().getOrDefault("scope", "");
-
-        Collection<String> authorities = Arrays.asList(scope.split(" "));
-        return authorities.stream()
-                .filter(StringUtils::hasText)
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        if (StringUtils.hasText(scope)) {
+            Collection<String> authorities = Arrays.asList(scope.split(" "));
+            return authorities.stream()
+                    .filter(StringUtils::hasText)
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toList());
+        } else {
+            return Collections.emptyList();
+        }
     }
 }
