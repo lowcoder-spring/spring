@@ -78,6 +78,11 @@ public class TencentCaptchaRobotVerifierService implements RobotVerifier {
         return false;
     }
 
+    @Override
+    public String getName() {
+        return NAME;
+    }
+
     private VerifyResponse verify(String ip, String randStr, String ticket) {
         Map<String, Object> query = new HashMap<>();
         query.put("appId", appId);

@@ -9,4 +9,9 @@ public class UselessRobotVerifier implements RobotVerifier {
         // 该实现始终返回为true
         return true;
     }
+
+    @Override
+    public String getName() {
+        return "USELESS";
+    }
 }

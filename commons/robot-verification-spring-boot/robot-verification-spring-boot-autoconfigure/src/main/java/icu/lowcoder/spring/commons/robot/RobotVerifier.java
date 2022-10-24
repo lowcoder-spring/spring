@@ -5,4 +5,6 @@ import java.util.Map;
 
 public interface RobotVerifier {
     boolean allow(HttpServletRequest request, Map<String, String> params);
+
+    String getName();
 }

@@ -1,4 +1,5 @@
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 icu.lowcoder.spring.commons.robot.RobotVerificationAutoConfiguration,\
-icu.lowcoder.spring.commons.robot.tencent.TencentCaptchaRobotVerifierAutoConfiguration
+icu.lowcoder.spring.commons.robot.tencent.TencentCaptchaRobotVerifierAutoConfiguration,\
+icu.lowcoder.spring.commons.robot.kaptcha.KaptchaRobotVerifierAutoConfiguration
