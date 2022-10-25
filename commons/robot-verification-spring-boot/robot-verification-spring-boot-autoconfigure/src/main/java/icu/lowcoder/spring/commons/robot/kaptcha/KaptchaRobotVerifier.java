@@ -4,12 +4,14 @@ import com.google.code.kaptcha.impl.DefaultKaptcha;
 import icu.lowcoder.spring.commons.robot.RobotVerifier;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
+@Slf4j
 @Getter
 @Setter
 public class KaptchaRobotVerifier implements RobotVerifier {
@@ -52,10 +54,12 @@ public class KaptchaRobotVerifier implements RobotVerifier {
 
     @Override
     public boolean allow(HttpServletRequest request, Map<String, String> params) {
+        log.debug("tester strategy: {}", strategy.name());
         String inStorage = null;
         switch (strategy) {
             case REDIS -> {
                 String requestId = request.getHeader(this.requestIdHeader);
+                log.debug("kaptcha request id: {}", requestId);
                 if (!StringUtils.hasText(requestId)) {
                     return false;
                 }
@@ -70,10 +74,12 @@ public class KaptchaRobotVerifier implements RobotVerifier {
             }
         }
 
+        log.debug("In storage value: {}", inStorage);
         if (inStorage == null) {
             return false;
         } else {
             String reqCaptcha = request.getParameter(reqParamName);
+            log.debug("In request value: {}", reqCaptcha);
             if (reqCaptcha == null) {
                 return false;
             }
