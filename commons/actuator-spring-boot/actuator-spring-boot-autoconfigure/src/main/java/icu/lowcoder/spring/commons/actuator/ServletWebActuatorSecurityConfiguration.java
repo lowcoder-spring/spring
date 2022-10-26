@@ -26,7 +26,7 @@ import java.util.List;
 public class ServletWebActuatorSecurityConfiguration {
 
     @Slf4j
-    @Configuration(proxyBeanMethods = false)
+    @Configuration
     static class ActuatorRequestSecurityConfiguration {
 
         private final ActuatorSecurityProperties actuatorSecurityProperties;
@@ -58,7 +58,9 @@ public class ServletWebActuatorSecurityConfiguration {
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {
             auth.userDetailsService(inMemoryUserDetailsService());
         }*/
-        public InMemoryUserDetailsManager userDetailsService() {
+
+        @Bean
+        public InMemoryUserDetailsManager managementSecurityUserDetailsService() {
             SecurityProperties.User user = securityProperties.getUser();
             List<String> roles = user.getRoles();
             return new InMemoryUserDetailsManager(
@@ -111,7 +113,7 @@ public class ServletWebActuatorSecurityConfiguration {
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             if (actuatorSecurityProperties.getEnabled()) {
                 AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-                authenticationManagerBuilder.userDetailsService(userDetailsService());
+                authenticationManagerBuilder.userDetailsService(managementSecurityUserDetailsService());
                 AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
 
                 http.antMatcher(webEndpointProperties.getBasePath() + "/**")
