@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
+@EnableWebSecurity
 @Configuration(proxyBeanMethods = false)
 public class WebSecurityConfig {
     @Value("${icu.lowcoder.spring.commons.management.security.enabled:true}")
@@ -19,7 +21,7 @@ public class WebSecurityConfig {
     private AdminServerProperties adminServerProperties;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain bootAdminSecurityFilterChain(HttpSecurity http) throws Exception {
         if (managementSecurityEnabled) {
             String adminContextPath = adminServerProperties.getContextPath();
 
