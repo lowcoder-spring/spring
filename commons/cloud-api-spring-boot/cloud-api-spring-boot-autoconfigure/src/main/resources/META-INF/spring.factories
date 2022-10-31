@@ -1,0 +1,4 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  icu.lowcoder.spring.commos.cloudapi.ali.sly.AliSlyCloudApiAutoConfiguration,\
+  icu.lowcoder.spring.commos.cloudapi.CloudApiAutoConfiguration

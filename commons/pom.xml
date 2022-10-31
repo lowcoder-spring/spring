@@ -32,6 +32,7 @@
         <module>wechat-spring-boot</module>
         <module>resource-server-spring-cloud</module>
         <module>openfeign-spring-cloud</module>
+        <module>cloud-api-spring-boot</module>
     </modules>
 
     <dependencyManagement>
@@ -179,6 +180,16 @@
             <dependency>
                 <groupId>icu.lowcoder.spring.commons</groupId>
                 <artifactId>openfeign-spring-cloud-autoconfigure</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>icu.lowcoder.spring.commons</groupId>
+                <artifactId>cloud-api-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>icu.lowcoder.spring.commons</groupId>
+                <artifactId>cloud-api-spring-boot-autoconfigure</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
