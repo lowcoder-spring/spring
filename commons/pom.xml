@@ -184,12 +184,12 @@
             </dependency>
             <dependency>
                 <groupId>icu.lowcoder.spring.commons</groupId>
-                <artifactId>cloud-api-spring-boot-starter</artifactId>
+                <artifactId>cloud-api-spring-boot-autoconfigure</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>icu.lowcoder.spring.commons</groupId>
-                <artifactId>cloud-api-spring-boot-autoconfigure</artifactId>
+                <artifactId>cloud-api-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

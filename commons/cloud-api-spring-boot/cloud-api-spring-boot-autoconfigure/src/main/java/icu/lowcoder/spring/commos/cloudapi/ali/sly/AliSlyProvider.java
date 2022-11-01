@@ -18,7 +18,7 @@ import java.util.Map;
 
 @Slf4j
 public abstract class AliSlyProvider implements CloudApi {
-    public static final String NAME = "AliSly";
+    public static final String NAME = "aliSly";
 
     public String getProvider() {
         return NAME;

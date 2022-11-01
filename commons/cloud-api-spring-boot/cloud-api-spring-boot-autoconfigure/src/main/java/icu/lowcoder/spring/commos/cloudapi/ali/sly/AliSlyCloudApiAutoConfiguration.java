@@ -13,17 +13,18 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnBean(CloudApiProperties.class)
-@ConditionalOnProperty(prefix = "icu.lowcoder.spring.commons.cloudapi.apis.BANK_CARD.providers", name = "aliSly")
 @AutoConfigureBefore(CloudApiAutoConfiguration.CloudApiDelegateConfig.class)
 public class AliSlyCloudApiAutoConfiguration {
 
     @Bean("aliSlyRealNameApi")
+    @ConditionalOnProperty(prefix = "icu.lowcoder.spring.commons.cloudapi.apis.REAL_NAME.providers", name = "ali-sly")
     RealNameApi aliSlyRealNameApiImpl(CloudApiProperties cloudApiProperties,
                                       @Autowired @Qualifier("cloudApiRestTemplate")RestTemplate restTemplate) {
         return new AliSlyRealNameApiImpl(restTemplate, cloudApiProperties.getApis().get(ApiName.REAL_NAME).getProviders().get(AliSlyProvider.NAME).getMeta());
     }
 
     @Bean("aliSlyBankCardApi")
+    @ConditionalOnProperty(prefix = "icu.lowcoder.spring.commons.cloudapi.apis.BANK_CARD.providers", name = "ali-sly")
     BankCardApi aliSlyBankCardApiImpl(CloudApiProperties cloudApiProperties,
                                       @Autowired @Qualifier("cloudApiRestTemplate")RestTemplate restTemplate) {
         return new AliSlyBankCardApiImpl(restTemplate, cloudApiProperties.getApis().get(ApiName.BANK_CARD).getProviders().get(AliSlyProvider.NAME).getMeta());

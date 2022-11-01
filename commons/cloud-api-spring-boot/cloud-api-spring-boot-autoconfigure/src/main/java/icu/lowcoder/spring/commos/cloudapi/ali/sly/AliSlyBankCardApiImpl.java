@@ -3,6 +3,7 @@ package icu.lowcoder.spring.commos.cloudapi.ali.sly;
 import icu.lowcoder.spring.commos.cloudapi.BankCardApi;
 import icu.lowcoder.spring.commos.cloudapi.ali.sly.model.AliSlyBankCardCheckResponse;
 import icu.lowcoder.spring.commos.cloudapi.model.BankCardCheckResponse;
+import icu.lowcoder.spring.commos.cloudapi.model.BankCardType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.LinkedMultiValueMap;
@@ -40,7 +41,11 @@ public class AliSlyBankCardApiImpl extends AliSlyProvider implements BankCardApi
         cloudApiResponse.setPassed(data.getResult().equals(0));
         cloudApiResponse.setDesc(data.getDesc());
         cloudApiResponse.setAbbreviation(data.getBankInfo().getAbbreviation());
-        cloudApiResponse.setType(data.getBankInfo().getType());
+        switch (data.getBankInfo().getType()) {
+            case "借记卡" -> cloudApiResponse.setType(BankCardType.DEBIT);
+            case "信用卡" -> cloudApiResponse.setType(BankCardType.CREDIT);
+            default -> cloudApiResponse.setType(BankCardType.OTHER);
+        }
         cloudApiResponse.setBank(data.getBankInfo().getBank());
         cloudApiResponse.setLogo(data.getBankInfo().getLogo());
 
