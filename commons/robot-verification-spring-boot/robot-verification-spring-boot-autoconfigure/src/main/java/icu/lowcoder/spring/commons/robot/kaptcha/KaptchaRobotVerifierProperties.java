@@ -23,4 +23,6 @@ public class KaptchaRobotVerifierProperties {
 
     private String redisKey = "icu:lowcoder:spring:commons:robot-verification:kaptcha";
 
+    private Long redisExpirationMinutes = 5L;
+
 }

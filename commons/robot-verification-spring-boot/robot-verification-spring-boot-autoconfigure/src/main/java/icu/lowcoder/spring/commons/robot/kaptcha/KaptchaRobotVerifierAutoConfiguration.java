@@ -123,7 +123,7 @@ public class KaptchaRobotVerifierAutoConfiguration {
             // storage
             switch (kaptchaRobotVerifierProperties.getStrategy()) {
                 case SESSION -> request.session().setAttribute(kaptcha.getConfig().getSessionKey(), capText);
-                case REDIS -> redisTemplate.opsForValue().set(kaptchaRobotVerifierProperties.getRedisKey() + "#" + requestId, capText, 5, TimeUnit.MINUTES);
+                case REDIS -> redisTemplate.opsForValue().set(kaptchaRobotVerifierProperties.getRedisKey() + "#" + requestId, capText, kaptchaRobotVerifierProperties.getRedisExpirationMinutes(), TimeUnit.MINUTES);
             }
 
             BufferedImage bi = kaptcha.createImage(capText);
