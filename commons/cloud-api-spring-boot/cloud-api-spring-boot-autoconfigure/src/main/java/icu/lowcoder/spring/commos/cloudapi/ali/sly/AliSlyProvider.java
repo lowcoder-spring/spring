@@ -30,7 +30,7 @@ public abstract class AliSlyProvider implements CloudApi {
     public <R extends CommonResponse> R call(String url, HttpMethod method, MultiValueMap<String, String> queryParams, HttpHeaders headers, Class<R> rClass) {
         String appCode = this.getMeta().get("appCode");
 
-        if (StringUtils.hasText(appCode)) {
+        if (!StringUtils.hasText(appCode)) {
             throw new CloudApiException(String.format("cloud-api[%s, %s] mete data[appCode] must not be empty", this.getName(), this.getProvider()));
         }
 
