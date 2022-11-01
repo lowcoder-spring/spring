@@ -1,7 +1,10 @@
 package icu.lowcoder.spring.commos.cloudapi.ali.sly;
 
+import icu.lowcoder.spring.commos.cloudapi.CloudApiRequestException;
 import icu.lowcoder.spring.commos.cloudapi.RealNameApi;
+import icu.lowcoder.spring.commos.cloudapi.ali.sly.model.AliSlyBankCardCheckResponse;
 import icu.lowcoder.spring.commos.cloudapi.ali.sly.model.AliSlyIdCardCheckResponse;
+import icu.lowcoder.spring.commos.cloudapi.model.BankCardType;
 import icu.lowcoder.spring.commos.cloudapi.model.IdCardCheckResponse;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.LinkedMultiValueMap;
@@ -30,12 +33,16 @@ public class AliSlyRealNameApiImpl extends AliSlyProvider implements RealNameApi
         queryParams.add("name", name);
 
         IdCardCheckResponse cloudApiResponse = new IdCardCheckResponse();
+        try {
+            AliSlyIdCardCheckResponse result = this.call(url, HttpMethod.GET, queryParams, null, AliSlyIdCardCheckResponse.class);
+            AliSlyIdCardCheckResponse.Data data = result.getData();
 
-        AliSlyIdCardCheckResponse result = this.call(url, HttpMethod.GET, queryParams, null, AliSlyIdCardCheckResponse.class);
-        AliSlyIdCardCheckResponse.Data data = result.getData();
-
-        cloudApiResponse.setPassed(data.getResult().equals(0));
-        cloudApiResponse.setDesc(data.getDesc());
+            cloudApiResponse.setPassed(data.getResult().equals(0));
+            cloudApiResponse.setDesc(data.getDesc());
+        } catch (CloudApiRequestException e) {
+            cloudApiResponse.setPassed(false);
+            cloudApiResponse.setDesc(e.getMessage());
+        }
 
         return cloudApiResponse;
     }

@@ -3,6 +3,7 @@ package icu.lowcoder.spring.commos.cloudapi.ali.sly;
 import icu.lowcoder.spring.commos.cloudapi.ApiName;
 import icu.lowcoder.spring.commos.cloudapi.CloudApi;
 import icu.lowcoder.spring.commos.cloudapi.CloudApiException;
+import icu.lowcoder.spring.commos.cloudapi.CloudApiRequestException;
 import icu.lowcoder.spring.commos.cloudapi.ali.sly.model.CommonResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -61,6 +62,11 @@ public abstract class AliSlyProvider implements CloudApi {
             R result = response.getBody();
             if (result != null && Boolean.TRUE.equals(result.getSuccess()) && result.getCode().equals(200)) {
                 aliSlyResponse = result;
+            }
+        } else {
+            CommonResponse errResult = response.getBody();
+            if (errResult != null) {
+                throw new CloudApiRequestException(errResult.getMsg());
             }
         }
 

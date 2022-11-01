@@ -16,6 +16,7 @@ public class CloudApiProperties {
 
     private Integer readTimeout = 60000;
     private Integer connectTimeout = 60000;
+    private Boolean throwOnResponseIsNotSuccessful = false;
 
     @Getter
     @Setter
