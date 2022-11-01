@@ -112,7 +112,7 @@ public class YunFanSmsSender extends SmsSender {
         request.setAppkey(yunFanSmsProperties.getAppKey());
 
         String timestamp = System.currentTimeMillis() + "";
-        String sign = DigestUtils.md5DigestAsHex((yunFanSmsProperties.getAppKey() + yunFanSmsProperties.getAppCode() + timestamp).getBytes());
+        String sign = DigestUtils.md5DigestAsHex((yunFanSmsProperties.getAppKey() + yunFanSmsProperties.getAppSecret() + timestamp).getBytes());
         request.setTimestamp(timestamp);
         request.setSign(sign);
         request.setPhone(phones);

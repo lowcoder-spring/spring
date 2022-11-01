@@ -10,5 +10,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class YunFanSmsProperties {
     private String appKey;
     private String appCode;
+    private String appSecret;
     private String url;
 }
