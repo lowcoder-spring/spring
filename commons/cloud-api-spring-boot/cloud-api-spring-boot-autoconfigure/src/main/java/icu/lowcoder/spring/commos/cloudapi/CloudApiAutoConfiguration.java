@@ -17,17 +17,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnProperty(prefix = "icu.lowcoder.spring.commons.cloudapi", name = "apis")
 @EnableConfigurationProperties(CloudApiProperties.class)
 public class CloudApiAutoConfiguration {
 
     @Bean("cloudApiRestTemplate")
-    public RestTemplate restTemplate() {
+    public RestTemplate restTemplate(CloudApiProperties cloudApiProperties) {
         RestTemplate restTemplate = new RestTemplate();
 
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setReadTimeout(60000);
-        factory.setConnectTimeout(60000);
+        factory.setReadTimeout(cloudApiProperties.getReadTimeout());
+        factory.setConnectTimeout(cloudApiProperties.getConnectTimeout());
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
@@ -41,24 +40,10 @@ public class CloudApiAutoConfiguration {
         return restTemplate;
     }
 
-    @Configuration(proxyBeanMethods = false)
-    public static class CloudApiDelegateConfig {
-
-        @Bean("cloudApiDelegate")
-        CloudApiDelegate cloudApiDelegate(CloudApiProperties cloudApiProperties, List<CloudApi> cloudApis) {
-            return new CloudApiDelegate(cloudApiProperties, cloudApis);
-        }
-
-        @Bean
-        @Primary
-        BankCardApi bankCardApi(CloudApiDelegate cloudApiDelegate) {
-            return cloudApiDelegate;
-        }
-
-        @Bean
-        @Primary
-        RealNameApi realNameApi(CloudApiDelegate cloudApiDelegate) {
-            return cloudApiDelegate;
-        }
+    @Primary
+    @Bean(name = {"cloudApiDelegate", "bankCardApi", "realNameApi"})
+    CloudApiDelegate cloudApiDelegate(CloudApiProperties cloudApiProperties, List<CloudApi> cloudApis) {
+        return new CloudApiDelegate(cloudApiProperties, cloudApis);
     }
+
 }

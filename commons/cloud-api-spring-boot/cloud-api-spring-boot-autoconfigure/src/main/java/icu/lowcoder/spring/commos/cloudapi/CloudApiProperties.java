@@ -14,6 +14,9 @@ import java.util.Map;
 public class CloudApiProperties {
     private Map<ApiName, Api> apis = new HashMap<>();
 
+    private Integer readTimeout = 60000;
+    private Integer connectTimeout = 60000;
+
     @Getter
     @Setter
     public static class Api {

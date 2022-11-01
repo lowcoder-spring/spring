@@ -13,7 +13,6 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnBean(CloudApiProperties.class)
-@AutoConfigureBefore(CloudApiAutoConfiguration.CloudApiDelegateConfig.class)
 public class AliSlyCloudApiAutoConfiguration {
 
     @Bean("aliSlyRealNameApi")
