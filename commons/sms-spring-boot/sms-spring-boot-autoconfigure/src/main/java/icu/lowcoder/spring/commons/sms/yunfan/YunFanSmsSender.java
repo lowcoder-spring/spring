@@ -89,7 +89,7 @@ public class YunFanSmsSender extends SmsSender {
     }
 
     @SuppressWarnings("rawtypes")
-    private HttpEntity buildRequest(String phones, String finalContent) {
+    private HttpEntity buildRequest(String phones, String content) {
         YunFanSmsRequest request = new YunFanSmsRequest();
         request.setAppcode(yunFanSmsProperties.getAppCode());
         request.setAppkey(yunFanSmsProperties.getAppKey());
@@ -99,6 +99,9 @@ public class YunFanSmsSender extends SmsSender {
         request.setTimestamp(timestamp);
         request.setSign(sign);
         request.setPhone(phones);
+
+        // 加企业名称
+        String finalContent = String.format("【%s】%s", yunFanSmsProperties.getSign(), content);
         request.setMsg(finalContent);
 
         HttpHeaders headers = new HttpHeaders();

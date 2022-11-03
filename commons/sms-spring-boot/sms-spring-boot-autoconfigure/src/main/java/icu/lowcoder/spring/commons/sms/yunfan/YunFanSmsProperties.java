@@ -12,4 +12,5 @@ public class YunFanSmsProperties {
     private String appCode;
     private String appSecret;
     private String url;
+    private String sign = "云帆";
 }
