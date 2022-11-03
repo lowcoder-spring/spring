@@ -1,10 +1,14 @@
 package icu.lowcoder.spring.commons.sms.yunfan;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import icu.lowcoder.spring.commons.sms.*;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
@@ -43,7 +47,22 @@ public class YunFanSmsSender extends SmsSender {
         RESPONSE_CODE_MAP.put("F0100", "未知错误");
     }
 
-    private static RestTemplate REST_TEMPLATE = new RestTemplate();
+    private static RestTemplate REST_TEMPLATE = buildRestTemplate();
+    private static RestTemplate buildRestTemplate() {
+        RestTemplate restTemplate = new RestTemplate();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
+        messageConverters.add(new MappingJackson2HttpMessageConverter(objectMapper));
+        messageConverters.add(new TextJackson2HttpMessageConverter(objectMapper));
+
+        restTemplate.setMessageConverters(messageConverters);
+
+        return restTemplate;
+    }
+
 
     private final YunFanSmsProperties yunFanSmsProperties;
     private final SmsProperties smsProperties;
