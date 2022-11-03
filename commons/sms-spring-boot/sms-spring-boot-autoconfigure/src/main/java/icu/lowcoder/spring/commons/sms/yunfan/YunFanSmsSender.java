@@ -5,16 +5,10 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.FormHttpMessageConverter;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.ResourceHttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class YunFanSmsSender extends SmsSender {
@@ -49,6 +43,8 @@ public class YunFanSmsSender extends SmsSender {
         RESPONSE_CODE_MAP.put("F0100", "未知错误");
     }
 
+    private static RestTemplate REST_TEMPLATE = new RestTemplate();
+
     private final YunFanSmsProperties yunFanSmsProperties;
     private final SmsProperties smsProperties;
 
@@ -57,19 +53,6 @@ public class YunFanSmsSender extends SmsSender {
         this.smsProperties = smsProperties;
     }
 
-    protected RestTemplate getRestTemplate() {
-        RestTemplate restTemplate = new RestTemplate();
-
-        FormHttpMessageConverter fc = new FormHttpMessageConverter();
-        StringHttpMessageConverter stringConverter = new StringHttpMessageConverter(StandardCharsets.UTF_8);
-        List<HttpMessageConverter<?>> partConverters = new ArrayList<>();
-        partConverters.add(stringConverter);
-        partConverters.add(new ResourceHttpMessageConverter());
-        fc.setPartConverters(partConverters);
-        restTemplate.getMessageConverters().addAll(Arrays.asList(stringConverter, fc, new MappingJackson2HttpMessageConverter()));
-
-        return restTemplate;
-    }
 
     @Override
     public void send(String target, String content, SmsType type) throws SmsSendException {
@@ -97,7 +80,7 @@ public class YunFanSmsSender extends SmsSender {
             throw new SmsSendException("需要至少一个正确的电话号码");
         }
 
-        ResponseEntity<YunFanSmsResponse> resp = getRestTemplate().postForEntity(
+        ResponseEntity<YunFanSmsResponse> resp = REST_TEMPLATE.postForEntity(
                 yunFanSmsProperties.getUrl(),
                 buildRequest(StringUtils.collectionToCommaDelimitedString(phonesSet), content),
                 YunFanSmsResponse.class);
