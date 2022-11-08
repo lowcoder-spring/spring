@@ -57,6 +57,7 @@ public class WebSecurityConfig {
 			.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests((authorize) -> authorize
 				.antMatchers("/login/**").permitAll()
+				.antMatchers("/admin/accounts/**").hasAnyAuthority("commons_*_admin", "commons_accounts_admin")
 				.anyRequest().authenticated()
 			)
 			.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
