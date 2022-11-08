@@ -3,6 +3,7 @@ package icu.lowcoder.spring.cloud.authentication.web.admin;
 import icu.lowcoder.spring.cloud.authentication.dao.AccountRepository;
 import icu.lowcoder.spring.cloud.authentication.dao.specs.AccountSpecs;
 import icu.lowcoder.spring.cloud.authentication.entity.Account;
+import icu.lowcoder.spring.cloud.authentication.util.AuthenticationUtils;
 import icu.lowcoder.spring.cloud.authentication.web.model.AdminAccountsListItem;
 import icu.lowcoder.spring.cloud.authentication.web.model.UpdateAccountAuthoritiesRequest;
 import icu.lowcoder.spring.cloud.authentication.web.model.UpdateAccountStatusRequest;
@@ -55,6 +56,13 @@ public class AdminAccountsController {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "账户不存在"));
 
+        // 忽略修改自己
+        String userIdStr = AuthenticationUtils.currentUserId();
+        UUID userId = UUID.fromString(userIdStr);
+        if (accountId.equals(userId)) {
+            return;
+        }
+
         String authorities = null;
         if (!CollectionUtils.isEmpty(request.getAuthorities())) {
             authorities = request.getAuthorities().stream()
@@ -71,6 +79,14 @@ public class AdminAccountsController {
     void updateAccountStatus(@PathVariable UUID accountId, @Valid @RequestBody UpdateAccountStatusRequest request) {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "账户不存在"));
+
+        // 忽略修改自己
+        String userIdStr = AuthenticationUtils.currentUserId();
+        UUID userId = UUID.fromString(userIdStr);
+        if (accountId.equals(userId)) {
+            return;
+        }
+
         account.setEnabled(request.getEnabled());
     }
 }
