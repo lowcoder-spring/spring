@@ -8,7 +8,7 @@ public class AccountSpecs {
     public static Specification<Account> keywordMatch(String keyword) {
         return (root, query, builder) -> {
             if (StringUtils.hasText(keyword)) {
-                String trimmed = keyword.trim();
+                String trimmed = "%" + keyword.trim() + "%";
                 return builder.or(
                         builder.like(root.get("name"), trimmed),
                         builder.like(root.get("phone"), trimmed),

@@ -6,10 +6,13 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
 public class AdminAccountsListItem {
+
+    private UUID id;
 
     private String name;
 

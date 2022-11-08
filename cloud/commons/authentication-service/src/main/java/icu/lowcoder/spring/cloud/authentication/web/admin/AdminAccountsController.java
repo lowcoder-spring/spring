@@ -4,9 +4,8 @@ import icu.lowcoder.spring.cloud.authentication.dao.AccountRepository;
 import icu.lowcoder.spring.cloud.authentication.dao.specs.AccountSpecs;
 import icu.lowcoder.spring.cloud.authentication.entity.Account;
 import icu.lowcoder.spring.cloud.authentication.util.AuthenticationUtils;
-import icu.lowcoder.spring.cloud.authentication.web.model.AdminAccountsListItem;
-import icu.lowcoder.spring.cloud.authentication.web.model.UpdateAccountAuthoritiesRequest;
-import icu.lowcoder.spring.cloud.authentication.web.model.UpdateAccountStatusRequest;
+import icu.lowcoder.spring.cloud.authentication.web.model.*;
+import icu.lowcoder.spring.commons.sms.PhoneNumberUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -91,4 +91,28 @@ public class AdminAccountsController {
 
         account.setEnabled(request.getEnabled());
     }
+
+    @PostMapping
+    UUIDIdResponse add(@Valid @RequestBody AddAccountRequest request) {
+        if (!PhoneNumberUtils.isPhoneNumber(request.getPhone())) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "请使用11位数字手机号");
+        }
+
+        if (accountRepository.existsByPhone(request.getPhone())) {
+            throw new HttpClientErrorException(HttpStatus.CONFLICT, "已存在该手机号");
+        }
+
+        Account account = new Account();
+        BeanUtils.copyProperties(request, account, "authorities");
+
+        if (!request.getAuthorities().isEmpty()) {
+            account.setAuthorities(StringUtils.collectionToCommaDelimitedString(request.getAuthorities()));
+        }
+
+        account.setRegisterTime(new Date());
+        accountRepository.save(account);
+
+        return new UUIDIdResponse(account.getId());
+    }
+
 }
