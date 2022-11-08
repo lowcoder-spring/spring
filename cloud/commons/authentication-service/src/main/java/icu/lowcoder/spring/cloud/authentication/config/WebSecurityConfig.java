@@ -24,24 +24,29 @@ import icu.lowcoder.spring.cloud.authentication.dao.AccountRepository;
 import icu.lowcoder.spring.cloud.authentication.service.JpaUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
-import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.*;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @EnableWebSecurity
 public class WebSecurityConfig {
@@ -60,7 +65,11 @@ public class WebSecurityConfig {
 				.antMatchers("/admin/accounts/**").hasAnyAuthority("commons_*_admin", "commons_accounts_admin")
 				.anyRequest().authenticated()
 			)
-			.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
+			.oauth2ResourceServer(oauth2 -> oauth2
+					.jwt(jwt -> jwt
+							.jwtAuthenticationConverter(grantedAuthoritiesExtractor())
+					)
+			)
 			.exceptionHandling((exceptions) -> exceptions
 				.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
 				.accessDeniedHandler(new BearerTokenAccessDeniedHandler())
@@ -117,6 +126,23 @@ public class WebSecurityConfig {
 		passwordEncoder.setDefaultPasswordEncoderForMatches(encoders.get(defaultForMatches));
 
 		return passwordEncoder;
+	}
+
+	Converter<Jwt, ? extends AbstractAuthenticationToken> grantedAuthoritiesExtractor() {
+		JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+		jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(source -> {
+			String scope = (String) source.getClaims().getOrDefault("scope", "");
+			if (StringUtils.hasText(scope)) {
+				Collection<String> authorities = Arrays.asList(scope.split(" "));
+				return authorities.stream()
+						.filter(StringUtils::hasText)
+						.map(SimpleGrantedAuthority::new)
+						.collect(Collectors.toList());
+			} else {
+				return Collections.emptyList();
+			}
+		});
+		return jwtAuthenticationConverter;
 	}
 
 }

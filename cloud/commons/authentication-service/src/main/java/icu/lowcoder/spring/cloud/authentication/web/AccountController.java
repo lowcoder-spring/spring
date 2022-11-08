@@ -6,18 +6,15 @@ import icu.lowcoder.spring.cloud.authentication.util.AuthenticationUtils;
 import icu.lowcoder.spring.cloud.authentication.web.model.AccountProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpServerErrorException;
 
-import java.util.Collection;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequestMapping("/account")
 @RestController
@@ -37,14 +34,14 @@ public class AccountController {
         accountProfile.setName(account.getName());
         accountProfile.setEmail(account.getEmail());
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        if (!CollectionUtils.isEmpty(authorities)) {
-            accountProfile.setAuthorities(authorities.stream()
-                    .map(GrantedAuthority::getAuthority)
+        if (StringUtils.hasText(account.getAuthorities())) {
+            accountProfile.setAuthorities(Stream.of(account.getAuthorities())
+                    .filter(StringUtils::hasText)
+                    .map(String::trim)
                     .collect(Collectors.toList())
             );
         }
+
         return accountProfile;
     }
 }
