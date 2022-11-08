@@ -45,7 +45,9 @@ public class AdminAccountsController {
         return accountPage.map(account -> {
             AdminAccountsListItem item = new AdminAccountsListItem();
             BeanUtils.copyProperties(account, item, "authorities");
-            item.setAuthorities(Stream.of(account.getAuthorities().split(",")).toList());
+            if (StringUtils.hasText(account.getAuthorities())) {
+                item.setAuthorities(Stream.of(account.getAuthorities().split(",")).toList());
+            }
             return item;
         });
     }

@@ -35,7 +35,7 @@ public class AccountController {
         accountProfile.setEmail(account.getEmail());
 
         if (StringUtils.hasText(account.getAuthorities())) {
-            accountProfile.setAuthorities(Stream.of(account.getAuthorities())
+            accountProfile.setAuthorities(Stream.of(account.getAuthorities().split(","))
                     .filter(StringUtils::hasText)
                     .map(String::trim)
                     .collect(Collectors.toList())
