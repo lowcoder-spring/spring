@@ -22,6 +22,8 @@ import com.nimbusds.jose.proc.SecurityContext;
 import icu.lowcoder.spring.cloud.authentication.EmptyPasswordEncoder;
 import icu.lowcoder.spring.cloud.authentication.dao.AccountRepository;
 import icu.lowcoder.spring.cloud.authentication.service.JpaUserDetailsService;
+import icu.lowcoder.spring.commons.exception.security.AccessDeniedExceptionHandler;
+import icu.lowcoder.spring.commons.exception.security.UnifiedExceptionAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.convert.converter.Converter;
@@ -40,8 +42,6 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
-import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.util.StringUtils;
 
@@ -70,10 +70,9 @@ public class WebSecurityConfig {
 							.jwtAuthenticationConverter(grantedAuthoritiesExtractor())
 					)
 			)
-			.exceptionHandling((exceptions) -> exceptions
-				.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
-				.accessDeniedHandler(new BearerTokenAccessDeniedHandler())
-			);
+			.exceptionHandling()
+			.accessDeniedHandler(new AccessDeniedExceptionHandler())
+			.authenticationEntryPoint(new UnifiedExceptionAuthenticationEntryPoint());
 		// @formatter:on
 		return http.build();
 	}
