@@ -33,7 +33,7 @@ public class AdminAccountsController {
     private AccountRepository accountRepository;
 
     @GetMapping
-    Page<AdminAccountsListItem> listAccounts(
+    public Page<AdminAccountsListItem> listAccounts(
             String keyword,
             @PageableDefault(sort = "registerTime", direction = Sort.Direction.DESC) Pageable pageable
     ) {
@@ -54,7 +54,7 @@ public class AdminAccountsController {
 
     @PostMapping(path = "/{accountId}", params = "operate=updateAuthorities")
     @Transactional
-    void updateAccountAuthorities(@PathVariable UUID accountId, @RequestBody UpdateAccountAuthoritiesRequest request) {
+    public void updateAccountAuthorities(@PathVariable UUID accountId, @RequestBody UpdateAccountAuthoritiesRequest request) {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "账户不存在"));
 
@@ -78,7 +78,7 @@ public class AdminAccountsController {
 
     @PostMapping(path = "/{accountId}", params = "operate=updateStatus")
     @Transactional
-    void updateAccountStatus(@PathVariable UUID accountId, @Valid @RequestBody UpdateAccountStatusRequest request) {
+    public void updateAccountStatus(@PathVariable UUID accountId, @Valid @RequestBody UpdateAccountStatusRequest request) {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "账户不存在"));
 
@@ -93,7 +93,8 @@ public class AdminAccountsController {
     }
 
     @PostMapping
-    UUIDIdResponse add(@Valid @RequestBody AddAccountRequest request) {
+    @Transactional
+    public UUIDIdResponse add(@Valid @RequestBody AddAccountRequest request) {
         if (!PhoneNumberUtils.isPhoneNumber(request.getPhone())) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "请使用11位数字手机号");
         }
