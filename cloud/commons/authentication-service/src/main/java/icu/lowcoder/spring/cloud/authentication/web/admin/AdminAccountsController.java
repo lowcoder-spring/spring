@@ -18,6 +18,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 
 import javax.validation.Valid;
 import java.util.Date;
@@ -99,19 +100,25 @@ public class AdminAccountsController {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "请使用11位数字手机号");
         }
 
-        if (accountRepository.existsByPhone(request.getPhone())) {
+        //存在不抛出异常
+        /*if (accountRepository.existsByPhone(request.getPhone())) {
             throw new HttpClientErrorException(HttpStatus.CONFLICT, "已存在该手机号");
+        }*/
+        Account account;
+        if (accountRepository.existsByPhone(request.getPhone())) {
+            account = accountRepository.findByPhone(request.getPhone()).orElseThrow(() -> new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "未知错误"));
+        } else {
+            account = new Account();
+
+            BeanUtils.copyProperties(request, account, "authorities");
+
+            if (!request.getAuthorities().isEmpty()) {
+                account.setAuthorities(StringUtils.collectionToCommaDelimitedString(request.getAuthorities()));
+            }
+
+            account.setRegisterTime(new Date());
+            accountRepository.save(account);
         }
-
-        Account account = new Account();
-        BeanUtils.copyProperties(request, account, "authorities");
-
-        if (!request.getAuthorities().isEmpty()) {
-            account.setAuthorities(StringUtils.collectionToCommaDelimitedString(request.getAuthorities()));
-        }
-
-        account.setRegisterTime(new Date());
-        accountRepository.save(account);
 
         return new UUIDIdResponse(account.getId());
     }
