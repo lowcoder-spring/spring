@@ -112,7 +112,7 @@ public class AdminAccountsController {
 
             BeanUtils.copyProperties(request, account, "authorities");
 
-            if (!request.getAuthorities().isEmpty()) {
+            if (!CollectionUtils.isEmpty(request.getAuthorities())) {
                 account.setAuthorities(StringUtils.collectionToCommaDelimitedString(request.getAuthorities()));
             }
 
