@@ -10,7 +10,7 @@ import java.util.List;
 public class WebUserInfo extends BaseResponse {
     private String openid;
     private String nickname;
-    private String sex;
+    private Integer sex;
     private String province;
     private String city;
     private String country;

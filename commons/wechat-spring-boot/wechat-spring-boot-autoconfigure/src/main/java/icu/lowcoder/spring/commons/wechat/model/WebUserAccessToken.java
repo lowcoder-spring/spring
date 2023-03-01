@@ -11,4 +11,6 @@ public class WebUserAccessToken extends BaseResponse {
     private String refreshToken;
     private String openid;
     private String scope;
+    private String unionid;
+    private Integer isSnapshotuser;
 }

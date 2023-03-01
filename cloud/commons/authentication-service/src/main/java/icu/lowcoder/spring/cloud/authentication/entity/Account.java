@@ -6,8 +6,12 @@ import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -28,6 +32,10 @@ public class Account extends AuditingUUIDIdentifierEntity {
     private Boolean enabled = true;
 
     private String authorities; // 默认授权
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "account", orphanRemoval = true)
+    @Where(clause = "deleted = false")
+    private List<WeChatConnection> weChatConnections = new ArrayList<>();
 
     private Boolean deleted = false;
 
